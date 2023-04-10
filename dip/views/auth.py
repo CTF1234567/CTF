@@ -24,7 +24,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         plain_password = request.form['password']
-
+        if ("'" or '"' or "-") in username:
+            return render_template('login.html', error='Штопанный задрот, на сервере запрещено использование SQL инъекций'), 403
         hashed_password = generate_password_hash(plain_password, current_app.config['PASSWORD_SALT'])
         
         user_query = db.session.query(User).filter(text(f"username='{username}' AND password='{hashed_password}'"))
