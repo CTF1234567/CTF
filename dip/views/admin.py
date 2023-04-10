@@ -6,6 +6,7 @@ from dip.utils.models import user_to_json
 from dip.utils.security import ALLOWED_IMAGE_EXTENSIONS, generate_password_hash, remove_image_metadata
 from dip.models import JobTitle, User
 
+import html
 bp = Blueprint('bp_admin', __name__)
 
 
@@ -44,7 +45,8 @@ def user_update(id_):
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
-        return f'Пользователь с именем {user_data.get("username")} уже существует', 409
+        username = html.escape(user_data.get("username"))
+        return f'Пользователь с именем {username} уже существует', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
