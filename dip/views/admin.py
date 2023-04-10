@@ -55,12 +55,14 @@ def user_update(id_):
         return f'Пользователь с email {email} уже существует', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
-        return f'Роль {user_data.get("role")} не найдена', 404
+        role = html.escape(user_data.fet('role'))
+        return f'Роль {role} не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
 
     if not jt and user.role != 'admin':
-        return f'Должность {user_data.get("job_title")} не найдена', 404
+        job = html.escape(user_data.get("job_title"))
+        return f'Должность {job} не найдена', 404
 
     photo_file = request.files.get('photo')
 
