@@ -6,7 +6,7 @@ from dip.extensions import db, migrate
 from dip.models import User
 from dip.utils.security import generate_password_hash
 from dip import views
-
+import hashlib
 
 def create_admin_user(db, config):
     admin = User.query.filter_by(username='admin').first()
@@ -18,7 +18,7 @@ def create_admin_user(db, config):
             config['PASSWORD_SALT']
             )
 
-        print('admin password: {}'.format(password))
+        print('admin password: {}'.format(hashlib.sha512((password).encode('utf-8')).hexdigest()))
 
         admin = User(
             username=config['ADMIN']['username'],
