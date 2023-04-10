@@ -6,6 +6,8 @@ from dip.utils.session import authed_only, get_current_user
 from dip.extensions import db
 from dip.models import WikiPage
 
+import html
+
 bp = Blueprint('bp_wiki', __name__)
 
 
@@ -57,7 +59,7 @@ def wiki_create():
     wiki_page = WikiPage(
         name=title,
         slug=slug,
-        content=content,
+        content=html.escape(content),
         owner_id=current_user.id,
     )
 
