@@ -108,22 +108,26 @@ def user_create():
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
-        return f'Пользователь с именем {user_data.get("username")} уже существует', 409
+        username = html.escape(user_data.get('username')) 
+        return f'Пользователь с именем {username} уже существует', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and user.email != user_data.get('email'):
-        return f'Пользователь с email {user_data.get("email")} уже существует', 409
+        email = html.escape(user_data.get('email'))
+        return f'Пользователь с email {email} уже существует', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
-        return f'Роль {user_data.get("role")} не найдена', 404
+        role = html.escape(user_data.get('role'))
+        return f'Роль {role} не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
 
     user.role = user_data.get('role')
 
     if not jt and user.role != 'admin':
-        return f'Должность {user_data.get("job_title")} не найдена', 404
+        job = html.escape(user_data.get('job_title'))
+        return f'Должность {job} не найдена', 404
 
     photo_file = request.files.get('photo')
 
@@ -218,7 +222,8 @@ def job_title_update(id_):
         title=new_job_title['title']).first()
 
     if job_title_exists:
-        return f'Должность с названием {new_job_title["title"]} уже существует', 409
+        job = html.escape(new_job_title["title"])
+        return f'Должность с названием {job} уже существует', 409
 
     job_title.title = new_job_title['title']
     db.session.commit()
