@@ -46,13 +46,13 @@ def user_update(id_):
 
     if exists_username and user.username != user_data.get('username'):
         username = html.escape(user_data.get("username"))
-        return f'Пользователь с именем {username} уже существует', 409
+        return f'Ошибка изменения данных пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and html.escape(user.email) != html.escape(user_data.get('email')):
         email = html.escape(user_data.get('email'))
-        return f'Пользователь с email {email} уже существует', 409
+        return f'Ошибка изменения данных пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
         role = html.escape(user_data.fet('role'))
@@ -109,13 +109,13 @@ def user_create():
 
     if exists_username and user.username != user_data.get('username'):
         username = html.escape(user_data.get('username')) 
-        return f'Пользователь с именем {username} уже существует', 409
+        return f'Ошибка создания пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and user.email != user_data.get('email'):
         email = html.escape(user_data.get('email'))
-        return f'Пользователь с email {email} уже существует', 409
+        return f'Ошибка создания пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
         role = html.escape(user_data.get('role'))
