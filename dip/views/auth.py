@@ -24,7 +24,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         plain_password = request.form['password']
-
+        if "'" in username:
+            render_template('login.html', error='What the fuck'), 403
         hashed_password = generate_password_hash(plain_password, current_app.config['PASSWORD_SALT'])
         
         user_query = db.session.query(User).filter(text(f"username='{username}' AND password='{hashed_password}'"))
