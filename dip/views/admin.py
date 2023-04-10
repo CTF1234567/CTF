@@ -62,7 +62,7 @@ def user_update(id_):
 
     if not jt and user.role != 'admin':
         job = html.escape(user_data.get("job_title"))
-        return f'Должность {job} не найдена', 404
+        return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
 
