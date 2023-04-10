@@ -47,7 +47,7 @@ def login():
         ], user))
 
         if not user:
-            return render_template('login.html', error='Неверный логин или пароль'), 409
+            return render_template('login.html', error='Неверный логин или пароль'), 403
 
         session = create_session(user['username'], user['role'])
         
