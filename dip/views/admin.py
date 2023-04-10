@@ -113,7 +113,7 @@ def user_create():
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and user.email != user_data.get('email'):
-        return f'Пользователь с email {user_data.get("username")} уже существует', 409
+        return f'Пользователь с email {user_data.get("email")} уже существует', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
         return f'Роль {user_data.get("role")} не найдена', 404
