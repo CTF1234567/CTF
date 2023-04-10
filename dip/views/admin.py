@@ -127,7 +127,7 @@ def user_create():
 
     if not jt and user.role != 'admin':
         job = html.escape(user_data.get('job_title'))
-        return f'Должность {job} не найдена', 404
+        return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
 
@@ -200,7 +200,7 @@ def job_title_delete(id_):
 
     if not job_title:
 
-        return f'Должность с id {id_} не найдена', 404
+        return f'Должность  не найдена', 404
 
     if job_title.users:
         return f'Невозможно удалить должность, поскольку она закреплена за пользователями', 409
@@ -223,7 +223,7 @@ def job_title_update(id_):
 
     if job_title_exists:
         job = html.escape(new_job_title["title"])
-        return f'Должность с названием {job} уже существует', 409
+        return f'Должность с таким названием уже существует', 409
 
     job_title.title = new_job_title['title']
     db.session.commit()
