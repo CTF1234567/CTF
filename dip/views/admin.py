@@ -6,6 +6,7 @@ from dip.utils.models import user_to_json
 from dip.utils.security import ALLOWED_IMAGE_EXTENSIONS, generate_password_hash, remove_image_metadata
 from dip.models import JobTitle, User
 
+import html
 bp = Blueprint('bp_admin', __name__)
 
 
@@ -44,20 +45,24 @@ def user_update(id_):
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
-        return f'Пользователь с именем {user_data.get("username")} уже существует', 409
+        username = html.escape(user_data.get("username"))
+        return f'Ошибка изменения данных пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
-    if exists_email and user.email != user_data.get('email'):
-        return f'Пользователь с email {user_data.get("username")} уже существует', 409
+    if exists_email and html.escape(user.email) != html.escape(user_data.get('email')):
+        email = html.escape(user_data.get('email'))
+        return f'Ошибка изменения данных пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
-        return f'Роль {user_data.get("role")} не найдена', 404
+        role = html.escape(user_data.fet('role'))
+        return f'Роль {role} не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
 
     if not jt and user.role != 'admin':
-        return f'Должность {user_data.get("job_title")} не найдена', 404
+        job = html.escape(user_data.get("job_title"))
+        return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
 
@@ -103,22 +108,26 @@ def user_create():
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
-        return f'Пользователь с именем {user_data.get("username")} уже существует', 409
+        username = html.escape(user_data.get('username')) 
+        return f'Ошибка создания пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and user.email != user_data.get('email'):
-        return f'Пользователь с email {user_data.get("username")} уже существует', 409
+        email = html.escape(user_data.get('email'))
+        return f'Ошибка создания пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
-        return f'Роль {user_data.get("role")} не найдена', 404
+        role = html.escape(user_data.get('role'))
+        return f'Роль {role} не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
 
     user.role = user_data.get('role')
 
     if not jt and user.role != 'admin':
-        return f'Должность {user_data.get("job_title")} не найдена', 404
+        job = html.escape(user_data.get('job_title'))
+        return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
 
@@ -191,7 +200,7 @@ def job_title_delete(id_):
 
     if not job_title:
 
-        return f'Должность с id {id_} не найдена', 404
+        return f'Должность  не найдена', 404
 
     if job_title.users:
         return f'Невозможно удалить должность, поскольку она закреплена за пользователями', 409
@@ -213,7 +222,8 @@ def job_title_update(id_):
         title=new_job_title['title']).first()
 
     if job_title_exists:
-        return f'Должность с названием {new_job_title["title"]} уже существует', 409
+        job = html.escape(new_job_title["title"])
+        return f'Должность с таким названием уже существует', 409
 
     job_title.title = new_job_title['title']
     db.session.commit()
