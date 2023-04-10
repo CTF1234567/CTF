@@ -7,8 +7,8 @@
     <form class="login-form" method="POST">
         <h1 class="login-form__header">Добро пожаловать!</h1>
         {% if error %}
-        <div class="login-form__message-error">
-            <p class="login-form__message-error__text">{{ error }}</p>
+        <div class="job-titles-list__message job-titles-list__message-error">
+            {{ error }}
         </div>
         {% endif %}
         <label class="login-form__label" for="username">Username</label>
