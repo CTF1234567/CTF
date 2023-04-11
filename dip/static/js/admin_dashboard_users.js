@@ -10,9 +10,13 @@ editButtons.forEach((button) => {
 });
 
 deleteButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const name = button.parentNode.querySelector('.user-list__name').textContent;
-        button.parentNode.remove();
+    button.addEventListener('click', (e) => {
+       
+    e.preventDefault()
+
+    const userId = button.parentNode.id;
+
+    deleteUser(userId);
     });
 });
 
@@ -22,7 +26,15 @@ addButton.addEventListener('click', (e) => {
     openEditModal(userId);
 })
 
-
+function deleteUser(userId) {
+    fetch(`/admin/dashboard/user//${userId}/delete`)
+    .then((response) => {
+      if (response.ok) {
+        const el = document.querySelector(`.user-list__name[id="${ userId }"]`);
+        el.remove();
+      }
+    })
+  }
 // Modal
 
 
