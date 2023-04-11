@@ -139,6 +139,7 @@ def user_create():
         # Potential XSS vuln fix
         role = html.escape(user_data.get('role'))
         # Enumeration vuln fix
+
         return f'Роль не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
@@ -185,6 +186,17 @@ def user_create():
 
     return redirect(url_for('bp_admin.users'))
 
+@bp.route('/admin/dashboard/user/<id_>/delete', methods=['GET', 'POST'])
+@admin_only
+def user_delete(id_):
+    user = User.query.filter_by(id=id_).first()
+    if not user:
+        return f'Пользователь не найден', 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return 'ok', 200
 
 @bp.route('/admin/dashboard/job-titles', methods=['GET', 'POST'])
 @admin_only

@@ -1,4 +1,6 @@
 from flask import Blueprint, make_response, render_template, request, url_for, current_app, redirect
+from imghdr import what
+from PIL import Image
 
 from dip.utils.session import set_user_identity, authed_only, get_current_user, role_required, set_user_if_authed
 from dip.utils.security import remove_image_metadata, generate_password_hash
@@ -40,9 +42,19 @@ def profile():
 
         photo_file = request.files.get('photo')
 
+        if what(photo_file) == 'jpg' or what(photo_file) == 'jpeg':
+            pass
+        else:
+            response = make_response("Неверный формат файла")
+            response.headers['Content-Type'] = 'text/plain'
+            response.status_code = 403
+            return response
+
         if photo_file.filename:
             filepath = current_app.config['PATHS']['user_images'] / \
                 photo_file.filename
+
+
 
             if not filepath.exists():
                 photo_file.save(filepath)
@@ -80,4 +92,3 @@ def profile_username(username):
                 'static', filename='img/profile-picture.jpg')
 
         return render_template('profile_id.html', user=user_json)
-
