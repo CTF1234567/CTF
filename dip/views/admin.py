@@ -26,7 +26,7 @@ def user(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
-        return f'Пользователь с id {id_} не найден', 404
+        return f'Пользователь не найден', 404
 
     return jsonify(user.json())
 
@@ -37,7 +37,7 @@ def user_update(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
-        return f'Пользователь с id {id_} не найден', 404
+        return f'Пользователь не найден', 404
 
     user_data = request.form
 
