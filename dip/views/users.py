@@ -58,6 +58,7 @@ def profile():
 
         return redirect(url_for('bp_user.profile'))
 
+# Only admin can check other's profiles
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
 @authed_only
 @role_required(['admin'])
