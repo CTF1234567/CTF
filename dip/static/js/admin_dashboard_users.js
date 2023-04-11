@@ -27,7 +27,7 @@ addButton.addEventListener('click', (e) => {
 })
 
 function deleteUser(userId) {
-    fetch(`/admin/dashboard/user//${userId}/delete`)
+    fetch(`/admin/dashboard/user/${userId}/delete`)
     .then((response) => {
       if (response.ok) {
         const el = document.querySelector(`.user-list__name[id="${ userId }"]`);
