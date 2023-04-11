@@ -11,7 +11,6 @@ ALLOWED_IMAGE_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 
 def generate_password_hash(password, salt):
-    # md5 to sha256
     return hashlib.sha256((password + salt).encode('utf-8')).hexdigest()
 
 
@@ -43,7 +42,7 @@ def create_signature(username, role, secret_key):
 
     return signature
 
-# Замена os.system на subprocess
+
 def remove_image_metadata(filename):
     filepath = pathlib.Path(current_app.root_path).parent / current_app.config["PATHS"]["user_images"] / filename
     command = ['exiftool', '-EXIF=', str(filepath)]
