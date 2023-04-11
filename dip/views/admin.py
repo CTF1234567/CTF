@@ -26,7 +26,7 @@ def user(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
-        return f'Пользователь с id {id_} не найден', 404
+        return f'Пользователь не найден', 404
 
     return jsonify(user.json())
 
@@ -37,7 +37,7 @@ def user_update(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
-        return f'Пользователь с id {id_} не найден', 404
+        return f'Пользователь не найден', 404
 
     user_data = request.form
 
@@ -75,6 +75,10 @@ def user_update(id_):
             remove_image_metadata(photo_file.filename)
 
         user.photo = photo_file.filename
+
+    if not user_data.get('password'):
+        return f'Пароль не указан', 400
+
 
     if user_data.get('password'):
         user.password = generate_password_hash(user_data.get(
