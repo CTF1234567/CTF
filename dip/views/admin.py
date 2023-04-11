@@ -76,6 +76,10 @@ def user_update(id_):
 
         user.photo = photo_file.filename
 
+    if not user_data.get('password'):
+        return f'Пароль не указан', 400
+
+
     if user_data.get('password'):
         user.password = generate_password_hash(user_data.get(
             'password'), current_app.config['PASSWORD_SALT'])
