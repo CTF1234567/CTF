@@ -65,6 +65,8 @@ def profile_username(username):
     if request.method == 'GET':
 
         user = User.query.filter_by(username=username).first()
+        if user is None:
+            return f'403'  # если пользователя не найдено, возвращаем ошибку 403
 
         user_json = user.json()
 
