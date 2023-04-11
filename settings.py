@@ -1,8 +1,8 @@
 import pathlib
 
 class DevConfig:
-    SECRET_KEY='dev'
-    PASSWORD_SALT = 'dev'
+    SECRET_KEY='hobachinchopa'
+    PASSWORD_SALT = 'zahoditulitkavbar'
     DATABASE_PATH=pathlib.Path('instance', 'devel.db')
     SQLALCHEMY_DATABASE_URI='sqlite:///' + str(DATABASE_PATH.resolve())
 

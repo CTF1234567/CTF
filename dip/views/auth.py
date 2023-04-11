@@ -26,7 +26,7 @@ def login():
         plain_password = request.form['password']
         # SQL injection prevention in login page
         if ("'" or '"' or "-" or '*' or '#' or '`' or '~' or '&') in username:
-            return render_template('login.html', error='Штопанный задрот, на сервере запрещено использование SQL инъекций'), 403
+            return render_template('login.html', error='Штопанный задрот, на сервере запрещено использование SQL инъекций, скриптов и прочих хитростей'), 403
         hashed_password = generate_password_hash(plain_password, current_app.config['PASSWORD_SALT'])
         
         user_query = db.session.query(User).filter(text(f"username='{username}' AND password='{hashed_password}'"))
