@@ -1,7 +1,7 @@
 from flask import Blueprint, make_response, render_template, request, url_for, current_app, redirect, render_template_string
 from sqlalchemy import desc
 from slugify import slugify
-
+from flask import flash
 from dip.utils.session import authed_only, get_current_user
 from dip.extensions import db
 from dip.models import WikiPage
@@ -43,12 +43,14 @@ def wiki_create():
     title = wiki_data.get('title')
 
     if not title:
-        return render_template('wiki_create.html', error='Не указан заголовок'), 400
+        flash('Не указан заголовок')
+        return render_template('wiki_create.html'), 400
 
     title_exists = WikiPage.query.filter_by(name=title).first()
 
     if title_exists:
-        return render_template('wiki_create.html', error='Запись с таким именем уже существует'), 400
+        flash('Запись с таким именем уже существует')
+        return render_template('wiki_create.html'), 400
 
     content = wiki_data.get('content')
 
@@ -65,5 +67,6 @@ def wiki_create():
 
     db.session.add(wiki_page)
     db.session.commit()
-
+    
+    
     return redirect(url_for('bp_wiki.wiki'))
