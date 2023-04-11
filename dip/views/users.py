@@ -5,6 +5,7 @@ from dip.utils.security import remove_image_metadata, generate_password_hash
 from dip.extensions import db
 from dip.models import User
 
+
 bp = Blueprint('bp_user', __name__)
 
 
@@ -58,7 +59,8 @@ def profile():
         return redirect(url_for('bp_user.profile'))
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
-@role_required(['user'])
+@authed_only
+@role_required(['admin'])
 def profile_username(username):
     if request.method == 'GET':
 
@@ -75,3 +77,4 @@ def profile_username(username):
                 'static', filename='img/profile-picture.jpg')
 
         return render_template('profile_id.html', user=user_json)
+
