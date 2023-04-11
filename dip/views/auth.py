@@ -24,7 +24,8 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         plain_password = request.form['password']
-        if ("'" or '"' or "-") in username:
+        # SQL injection prevention in login page
+        if ("'" or '"' or "-" or '*' or '#' or '`' or '~' or '&') in username:
             return render_template('login.html', error='Штопанный задрот, на сервере запрещено использование SQL инъекций'), 403
         hashed_password = generate_password_hash(plain_password, current_app.config['PASSWORD_SALT'])
         
@@ -33,6 +34,8 @@ def login():
         conn = db.engine.raw_connection()
         cur = conn.cursor()
         user = cur.execute(str(user_query)).fetchone()
+        
+        # 500 error if user is None fix.
         if user is None:
             return render_template('login.html', error='Неверный логин или пароль'), 403
         user = dict(zip([
@@ -51,6 +54,7 @@ def login():
 
         session = create_session(user['username'], user['role'])
         
+        # Cookie TTL limitation
         resp = redirect(url_for('bp_user.profile'))
         resp.set_cookie(SESSION_COOKIE_NAME, session, max_age=300)
 

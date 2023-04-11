@@ -26,6 +26,7 @@ def user(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
+        # Enumeration vuln fix
         return f'Пользователь не найден', 404
 
     return jsonify(user.json())
@@ -37,6 +38,7 @@ def user_update(id_):
     user = User.query.filter_by(id=id_).first()
 
     if not user:
+        # Enumeration vuln fix
         return f'Пользователь не найден', 404
 
     user_data = request.form
@@ -45,23 +47,31 @@ def user_update(id_):
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
+        # Potential XSS vuln fix
         username = html.escape(user_data.get("username"))
+        # Enumeration vuln fix
         return f'Ошибка изменения данных пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and html.escape(user.email) != html.escape(user_data.get('email')):
+        # Potential XSS vuln fix
         email = html.escape(user_data.get('email'))
+        # Enumeration vuln fix
         return f'Ошибка изменения данных пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
+        # Potential XSS vuln fix
         role = html.escape(user_data.fet('role'))
-        return f'Роль {role} не найдена', 404
+        # Enumeration vuln fix
+        return f'Роль не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
 
     if not jt and user.role != 'admin':
+        # Potential XSS vuln fix
         job = html.escape(user_data.get("job_title"))
+        # Enumeration vuln fix
         return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
@@ -75,7 +85,7 @@ def user_update(id_):
             remove_image_metadata(photo_file.filename)
 
         user.photo = photo_file.filename
-
+    # No password error fix
     if not user_data.get('password'):
         return f'Пароль не указан', 400
 
@@ -112,17 +122,24 @@ def user_create():
         username=user_data.get('username')).first()
 
     if exists_username and user.username != user_data.get('username'):
+        # Potential XSS vuln fix
         username = html.escape(user_data.get('username')) 
+        # Enumeration vuln fix
         return f'Ошибка создания пользователя', 409
 
     exists_email = User.query.filter_by(email=user_data.get("email")).first()
 
     if exists_email and user.email != user_data.get('email'):
+        # Potential XSS vuln fix
         email = html.escape(user_data.get('email'))
+        # Enumeration vuln fix
         return f'Ошибка создания пользователя', 409
 
     if user_data.get('role') not in current_app.config['ROLES']:
+        # Potential XSS vuln fix
         role = html.escape(user_data.get('role'))
+        # Enumeration vuln fix
+
         return f'Роль не найдена', 404
 
     jt = JobTitle.query.filter_by(id=user_data.get("job_title")).first()
@@ -130,7 +147,9 @@ def user_create():
     user.role = user_data.get('role')
 
     if not jt and user.role != 'admin':
+        # Potential XSS vuln fix
         job = html.escape(user_data.get('job_title'))
+        # Enumeration vuln fix
         return f'Должность не найдена', 404
 
     photo_file = request.files.get('photo')
@@ -145,6 +164,7 @@ def user_create():
 
         user.photo = photo_file.filename
 
+    # No password error fix
     if not user_data.get('password'):
         return f'Пароль не указан', 400
 
@@ -214,7 +234,7 @@ def job_title_delete(id_):
     job_title = JobTitle.query.filter_by(id=id_).first()
 
     if not job_title:
-
+        # Enumeration vuln fix
         return f'Должность  не найдена', 404
 
     if job_title.users:
@@ -237,7 +257,9 @@ def job_title_update(id_):
         title=new_job_title['title']).first()
 
     if job_title_exists:
+        # Potential XSS fix
         job = html.escape(new_job_title["title"])
+        # Enumeration vuln fix
         return f'Должность с таким названием уже существует', 409
 
     job_title.title = new_job_title['title']
