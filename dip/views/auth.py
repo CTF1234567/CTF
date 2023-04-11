@@ -52,7 +52,7 @@ def login():
         session = create_session(user['username'], user['role'])
         
         resp = redirect(url_for('bp_user.profile'))
-        resp.set_cookie(SESSION_COOKIE_NAME, session, max_age=12)
+        resp.set_cookie(SESSION_COOKIE_NAME, session, max_age=300)
 
         g.user = user
 
