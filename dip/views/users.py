@@ -1,6 +1,6 @@
 from flask import Blueprint, make_response, render_template, request, url_for, current_app, redirect
 
-from dip.utils.session import set_user_identity, authed_only, get_current_user, role_required, set_user_if_authed
+from dip.utils.session import set_user_identity, authed_only, get_current_user, role_required, set_user_if_authed, admin_only
 from dip.utils.security import remove_image_metadata, generate_password_hash
 from dip.extensions import db
 from dip.models import User
@@ -58,7 +58,7 @@ def profile():
         return redirect(url_for('bp_user.profile'))
 
 @bp.route('/profile/<username>', methods=['GET', 'POST'])
-@role_required(['user'])
+@admin_only
 def profile_username(username):
     if request.method == 'GET':
 
