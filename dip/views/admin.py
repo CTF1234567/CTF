@@ -166,6 +166,18 @@ def user_create():
 
     return redirect(url_for('bp_admin.users'))
 
+@bp.route('/admin/dashboard/user/delete', methods=['GET', 'POST'])
+@admin_only
+def user_delete(id_):
+
+    if not user:
+
+        return f'Пользователь не найден', 404
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return 'ok', 200
 
 @bp.route('/admin/dashboard/job-titles', methods=['GET', 'POST'])
 @admin_only
