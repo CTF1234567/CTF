@@ -17,7 +17,7 @@ def create_admin_user(db, config):
             config['ADMIN']['password'],
             config['PASSWORD_SALT']
             )
-
+        # Hash the password
         print('admin password: {}'.format(hashlib.sha512((password).encode('utf-8')).hexdigest()))
 
         admin = User(

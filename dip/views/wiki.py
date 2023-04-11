@@ -43,12 +43,14 @@ def wiki_create():
     title = wiki_data.get('title')
 
     if not title:
+        # Error isn't render fix
         flash('Не указан заголовок')
         return render_template('wiki_create.html'), 400
 
     title_exists = WikiPage.query.filter_by(name=title).first()
 
     if title_exists:
+        # Error isn't render fix
         flash('Запись с таким именем уже существует')
         return render_template('wiki_create.html'), 400
 
