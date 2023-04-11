@@ -42,7 +42,7 @@ def wiki_create():
 
     title = wiki_data.get('title')
 
-    if title is None:
+    if not title:
         return render_template('wiki_create.html', error='Не указан заголовок'), 400
 
     title_exists = WikiPage.query.filter_by(name=title).first()
