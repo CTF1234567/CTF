@@ -169,9 +169,8 @@ def user_create():
 @bp.route('/admin/dashboard/user/delete', methods=['GET', 'POST'])
 @admin_only
 def user_delete(id_):
-
+    user = User.query.filter_by(id=id_).first()
     if not user:
-
         return f'Пользователь не найден', 404
 
     db.session.delete(user)
