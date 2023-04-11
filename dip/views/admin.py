@@ -166,7 +166,7 @@ def user_create():
 
     return redirect(url_for('bp_admin.users'))
 
-@bp.route('/admin/dashboard/user/delete', methods=['GET', 'POST'])
+@bp.route('/admin/dashboard/user/<id_>/delete', methods=['GET', 'POST'])
 @admin_only
 def user_delete(id_):
     user = User.query.filter_by(id=id_).first()
