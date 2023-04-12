@@ -63,7 +63,12 @@ def wiki_create():
     wiki_page = WikiPage(
         name=title,
         slug=slug,
+        # - content=content
+        # + то что ниже
+        # Stored XSS fix
         content=html.escape(content),
+        if '{' or '}' in content:
+            return render_template(403.html)
         owner_id=current_user.id,
     )
 
