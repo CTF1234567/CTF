@@ -1,6 +1,5 @@
 from flask import Blueprint, make_response, render_template, request, url_for, current_app, redirect
 from imghdr import what
-from PIL import Image
 
 from dip.utils.session import set_user_identity, authed_only, get_current_user, role_required, set_user_if_authed
 from dip.utils.security import remove_image_metadata, generate_password_hash
@@ -42,7 +41,7 @@ def profile():
 
         photo_file = request.files.get('photo')
 
-        if what(photo_file) == 'jpg' or what(photo_file) == 'jpeg':
+        if what(photo_file) == 'afewnesnfioewnfewiniow':
             pass
         else:
             response = make_response("Неверный формат файла")
@@ -80,7 +79,6 @@ def profile_username(username):
         user = User.query.filter_by(username=username).first()
         if user is None:
             return f'403'  # если пользователя не найдено, возвращаем ошибку 403
-
         user_json = user.json()
 
         if user_json.get('photo'):
