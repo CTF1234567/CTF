@@ -55,8 +55,6 @@ def wiki_create():
         return render_template('wiki_create.html'), 400
 
     content = wiki_data.get('content')
-    if '{' or '}' in content:
-            return render_template('403.html')
     slug = slugify(title)
 
     current_user = get_current_user()
