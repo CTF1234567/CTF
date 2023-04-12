@@ -18,7 +18,7 @@ def login():
 
         if not user:
             return render_template('login.html')
-
+#
         return redirect(url_for('bp_user.profile'))
 
     if request.method == 'POST':

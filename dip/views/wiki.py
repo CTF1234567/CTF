@@ -27,8 +27,8 @@ def wiki_slug(slug):
 
     if not wiki_page:
         return render_template('404.html'), 404
-
-    return render_template_string(render_template('wiki_slug.html', wiki_page=wiki_page.json()))
+    #SSTI?
+    return render_template('wiki_slug.html', wiki_page=wiki_page.json())
 
 
 @bp.route('/wiki/create', methods=['GET', 'POST'])
